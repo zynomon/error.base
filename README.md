@@ -13,6 +13,8 @@ a font from this website [ekushey](https://okkhor52.com/download.html?id=_024)
 so in conclusion this whole .deb package contains so many stuffs to turn a ugly graphicless minimal kde system to look good
 but what are you thinking? this package would be bigger than 100mb?
 well no it's 49 mb or i'd say 50
+---
 
 <img width="1280" height="775" alt="image" src="https://github.com/user-attachments/assets/a3d99c4b-ed67-4c7d-9d86-70bd6caafcfb" />
 the ascii after installation
+
