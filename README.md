@@ -1,4 +1,5 @@
-#  <img width="700" height="700" alt="base" src="https://github.com/user-attachments/assets/66384ead-09a9-4e6e-ac8d-3c546e004ec5" />  error.base
+#  <img width="700" height="700" alt="base" src="https://github.com/user-attachments/assets/66384ead-09a9-4e6e-ac8d-3c546e004ec5" />
+  error.base
 
 error.base is a debian meta package that contains..
 errpapers ( error.os core wallpapers )
@@ -24,3 +25,5 @@ the ascii after installation
 
 
 
+# To download or install error.base 
+check error.os repo
