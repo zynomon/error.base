@@ -12,9 +12,9 @@
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/components/style.css' | relative_url }}">
   <link href="https://fonts.cdnfonts.com/css/ocr-a-extended" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
   <style>
     #vanta-bg {
       position: fixed;
@@ -24,6 +24,12 @@
       height: 100%;
       z-index: -1;
       pointer-events: none;
+      will-change: transform;
+    }
+    #vanta-bg canvas {
+      width: 100%;
+      height: 100%;
+      image-rendering: crisp-edges;
     }
     .anim-toggle svg {
       stroke: var(--txt);
@@ -94,11 +100,22 @@
     var toggleBtn = document.getElementById('header-toggle');
     var timeout;
     var forced = false;
-    var consentGiven = localStorage.getItem('consentGiven') === 'true';
+    var consentGiven = false;
+    try {
+      consentGiven = localStorage.getItem('consentGiven') === 'true';
+    } catch(e) {}
+
     var vantaEffect = null;
-    var animEnabled = consentGiven ? localStorage.getItem('animEnabled') !== 'false' : true;
+    var vantaType = 'topology';
+    var animEnabled = true;
+    try {
+      animEnabled = consentGiven ? localStorage.getItem('animEnabled') !== 'false' : true;
+    } catch(e) {}
+
     var root = document.documentElement;
     var animToggle = document.getElementById('anim-toggle');
+    var cores = navigator.hardwareConcurrency || 1;
+    var ram = navigator.deviceMemory || 1;
 
     function expand() { if (!forced) header.classList.add('expanded'); }
     function collapse() { if (!forced) header.classList.remove('expanded'); }
@@ -111,7 +128,9 @@
       var userChoice = confirm('This will save your preferences using cookies. OK to continue, Cancel to skip.');
       if (userChoice) {
         consentGiven = true;
-        localStorage.setItem('consentGiven', 'true');
+        try {
+          localStorage.setItem('consentGiven', 'true');
+        } catch(e) {}
         callback(true);
       } else {
         callback(false);
@@ -119,6 +138,7 @@
     }
 
     function getAdaptivePoints() {
+      if (cores <= 2 || ram <= 2) return 10;
       var width = window.innerWidth;
       if (width < 768) return 15;
       if (width < 1200) return 20;
@@ -126,6 +146,7 @@
     }
 
     function getAdaptiveSpacing() {
+      if (cores <= 2 || ram <= 2) return 25;
       var width = window.innerWidth;
       if (width < 768) return 25;
       if (width < 1200) return 22;
@@ -134,10 +155,16 @@
 
     function initVanta() {
       if (!animEnabled || vantaEffect) return;
+
+      var el = document.getElementById('vanta-bg');
+      if (!el) return;
+
       var isLight = root.getAttribute('data-theme') === 'light';
+
       if (isLight) {
+        vantaType = 'cells';
         vantaEffect = VANTA.CELLS({
-          el: "#vanta-bg",
+          el: el,
           mouseControls: true,
           touchControls: true,
           gyroControls: false,
@@ -152,12 +179,13 @@
           amplitudeFactor: 1.0,
           ringFactor: 1.0,
           rotationFactor: 1.0,
-          speed: 5.0,
+          speed: 3.0,
           size: 0.9
         });
       } else {
+        vantaType = 'topology';
         vantaEffect = VANTA.TOPOLOGY({
-          el: "#vanta-bg",
+          el: el,
           mouseControls: false,
           touchControls: false,
           gyroControls: false,
@@ -176,15 +204,46 @@
 
     function destroyVanta() {
       if (vantaEffect) {
-        vantaEffect.destroy();
+        try {
+          vantaEffect.destroy();
+        } catch(e) {}
         vantaEffect = null;
+      }
+      var el = document.getElementById('vanta-bg');
+      if (el) {
+        el.style.background = '';
+        while (el.firstChild) {
+          el.removeChild(el.firstChild);
+        }
       }
     }
 
-    function updateVanta() {
-      if (!animEnabled) return;
-      destroyVanta();
-      initVanta();
+    function updateVantaTheme(isLight) {
+      if (!vantaEffect || !animEnabled) return;
+
+      try {
+        if (isLight && vantaType !== 'cells') {
+          destroyVanta();
+          initVanta();
+        } else if (!isLight && vantaType !== 'topology') {
+          destroyVanta();
+          initVanta();
+        } else if (isLight) {
+          vantaEffect.setOptions({
+            backgroundColor: 0xd7d8cf,
+            color1: 0xa7a797,
+            color2: 0x61667f
+          });
+        } else {
+          vantaEffect.setOptions({
+            color: 0xffffff,
+            backgroundColor: 0x0D0F12
+          });
+        }
+      } catch(e) {
+        destroyVanta();
+        initVanta();
+      }
     }
 
     function updateAnimButton() {
@@ -196,14 +255,16 @@
       }
     }
 
-    if (consentGiven) {
-      forced = localStorage.getItem('headerExpanded') === 'true';
-      if (forced) header.classList.add('expanded');
-      animEnabled = localStorage.getItem('animEnabled') !== 'false';
-    }
+    try {
+      if (consentGiven) {
+        forced = localStorage.getItem('headerExpanded') === 'true';
+        if (forced) header.classList.add('expanded');
+        animEnabled = localStorage.getItem('animEnabled') !== 'false';
+      }
+    } catch(e) {}
 
-    if (animEnabled) {
-      initVanta();
+    if (animEnabled && typeof VANTA !== 'undefined') {
+      setTimeout(initVanta, 100);
     }
     updateAnimButton();
 
@@ -244,7 +305,9 @@
         }
         requestConsent(function(granted) {
           if (granted) {
-            localStorage.setItem('headerExpanded', forced);
+            try {
+              localStorage.setItem('headerExpanded', forced);
+            } catch(e) {}
           }
         });
       };
@@ -261,14 +324,19 @@
         updateAnimButton();
         requestConsent(function(granted) {
           if (granted) {
-            localStorage.setItem('animEnabled', animEnabled);
+            try {
+              localStorage.setItem('animEnabled', animEnabled);
+            } catch(e) {}
           }
         });
       };
     }
 
     var themeToggle = document.getElementById('theme-toggle');
-    var saved = consentGiven ? localStorage.getItem('theme') : null;
+    var saved = null;
+    try {
+      saved = consentGiven ? localStorage.getItem('theme') : null;
+    } catch(e) {}
 
     function updateThemeIcon() {
       if (!themeToggle) return;
@@ -294,18 +362,24 @@
     if (themeToggle) {
       themeToggle.onclick = function() {
         var newTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        if (newTheme === 'light') {
+        var isLight = newTheme === 'light';
+
+        if (isLight) {
           root.setAttribute('data-theme', 'light');
         } else {
           root.removeAttribute('data-theme');
         }
         updateThemeIcon();
+
         if (animEnabled) {
-          updateVanta();
+          updateVantaTheme(isLight);
         }
+
         requestConsent(function(granted) {
           if (granted) {
-            localStorage.setItem('theme', newTheme);
+            try {
+              localStorage.setItem('theme', newTheme);
+            } catch(e) {}
           }
         });
       };
@@ -313,21 +387,16 @@
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
       if (!localStorage.getItem('theme') || !consentGiven) {
-        if (e.matches) {
-          root.removeAttribute('data-theme');
-        } else {
+        var isLight = !e.matches;
+        if (isLight) {
           root.setAttribute('data-theme', 'light');
+        } else {
+          root.removeAttribute('data-theme');
         }
         updateThemeIcon();
         if (animEnabled) {
-          updateVanta();
+          updateVantaTheme(isLight);
         }
-      }
-    });
-
-    window.addEventListener('resize', function() {
-      if (animEnabled && vantaEffect) {
-        updateVanta();
       }
     });
 
