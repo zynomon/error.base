@@ -303,7 +303,7 @@ main {
     overflow-wrap: break-word;
     position: relative;
     overflow: visible;
-    color-mix(in srgb, var(--bg-1) 90%, transparent)
+    background-color: (in srgb, var(--bg-1) 90%, transparent);
 }
 
 main::after {
