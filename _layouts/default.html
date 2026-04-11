@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <meta name="description" content="{{ page.description }}">
+  <meta property="og:title" content="{{ page.title }}">
+  <meta property="og:description" content="{{ page.description }}">
+  {% if page.embed-thumbnail %}<meta property="og:image" content="{{ page.embed-thumbnail }}">{% endif %}
+  {% if page.icon %}<link rel="icon" type="image/svg+xml" href="{{ page.icon }}">{% endif %}
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/components/style.css' | relative_url }}">
+</head>
+<body>
+  {% if page.splash %}
+  <div id="splash-screen">
+    <span class="system-title">{{ page.title }}</span>
+  </div>
+  <script src="{{ '/components/splash.js' | relative_url }}"></script>
+  {% endif %}
+
+  <header id="site-header">
+    <div class="header-top">
+      <span class="header-title">{{ page.title }}</span>
+      <button class="header-dot" id="header-toggle" aria-label="Toggle navigation"></button>
+    </div>
+    <nav class="header-nav">
+      <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>home</a>
+      <a href="{{ '/download/' | relative_url }}" {% if page.url contains '/download' %}class="active"{% endif %}>download</a>
+      <a href="{{ '/faq/' | relative_url }}" {% if page.url contains '/faq' %}class="active"{% endif %}>faq</a>
+    </nav>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <hr>
+  <footer>
+    Built with Jekyll
+  </footer>
+
+  <script>
+  (function(){
+    var h = document.getElementById('site-header');
+    var t = document.getElementById('header-toggle');
+    if(t) t.onclick = function(){ h.classList.toggle('expanded') };
+
+    var COPY = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    var CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+
+    document.querySelectorAll('pre code').forEach(function(c){
+      var p = c.parentElement;
+      if(p.parentElement.classList.contains('code-block-wrapper')) return;
+      var w = document.createElement('div');
+      w.className = 'code-block-wrapper';
+      p.parentNode.insertBefore(w, p);
+      w.appendChild(p);
+      var b = document.createElement('button');
+      b.className = 'copy-btn';
+      b.innerHTML = COPY;
+      b.setAttribute('aria-label', 'Copy code');
+      b.onclick = function(){
+        navigator.clipboard.writeText(c.textContent).then(function(){
+          b.innerHTML = CHECK;
+          b.classList.add('copied');
+          setTimeout(function(){ b.innerHTML = COPY; b.classList.remove('copied'); }, 2000);
+        });
+      };
+      w.appendChild(b);
+    });
+  })();
+  </script>
+</body>
+</html>
