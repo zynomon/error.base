@@ -21,14 +21,16 @@
   {% endif %}
 
   <header id="site-header">
+    <div class="header-bg"></div>
     <div class="header-top">
-      <span class="header-title">{{ page.title }}</span>
+      <img src="icons/header-icon.svg" alt="header icon" class="header-icon">
       <button class="header-dot" id="header-toggle" aria-label="Toggle navigation"></button>
     </div>
     <nav class="header-nav">
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>home</a>
       <a href="{{ '/download/' | relative_url }}" {% if page.url contains '/download' %}class="active"{% endif %}>download</a>
-      <a href="{{ '/faq/' | relative_url }}" {% if page.url contains '/faq' %}class="active"{% endif %}>faq</a>
+      <a href="{{ '/wiki/' | relative_url }}" {% if page.url contains '/wiki' %}class="active"{% endif %}>wiki</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about' %}class="active"{% endif %}>about us</a>
     </nav>
   </header>
 
@@ -43,9 +45,21 @@
 
   <script>
   (function(){
-    var h = document.getElementById('site-header');
-    var t = document.getElementById('header-toggle');
-    if(t) t.onclick = function(){ h.classList.toggle('expanded') };
+    var header = document.getElementById('site-header');
+    var toggleBtn = document.getElementById('header-toggle');
+    var timeout;
+    var forced = false;
+
+    function expand() { if (!forced) header.classList.add('expanded'); }
+    function collapse() { if (!forced) header.classList.remove('expanded'); }
+
+    header.onmouseenter = function() { clearTimeout(timeout); expand(); };
+    header.onmouseleave = function() { timeout = setTimeout(collapse, 150); };
+    toggleBtn.onclick = function(e) {
+      e.stopPropagation();
+      forced = !forced;
+      forced ? header.classList.add('expanded') : header.classList.remove('expanded');
+    };
 
     var COPY = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
     var CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
