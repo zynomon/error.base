@@ -3,7 +3,6 @@ layout: default
 splash: false
 title: "Home"
 description: "Welcome to the homepage"
-embed-thumbnail: ../icons/thumb.png
 icon: webicon.svg
 ---
 
