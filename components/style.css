@@ -82,13 +82,7 @@
 .anim-toggle.off svg {
     opacity: 0.5;
 }
-.theme-toggle img,
-.anim-toggle img,
-.copy-btn img {
-    width: 18px;
-    height: 18px;
-    display: block;
-}
+
 body {
     background: var(--bg-1);
     color: var(--txt);
