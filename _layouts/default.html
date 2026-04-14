@@ -7,7 +7,7 @@
   <meta name="description" content="{{ page.description }}">
   <meta property="og:title" content="{{ page.title }}">
   <meta property="og:description" content="{{ page.description }}">
-  <meta property="og:image" content="{{ '/icon/thumb.png' | relative_url }}">
+  <meta property="og:image" content="{{ '/components/thumb.png' | relative_url }}">
   {% if page.icon %}
     <link rel="icon" type="image/svg+xml" href="{{ '/icon/' | append: page.icon | relative_url }}">
   {% endif %}
@@ -40,7 +40,7 @@
     <div class="header-nav">
       <a href="{{ '/' | relative_url }}" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %} data-icon="home">Start</a>
       <a href="{{ '/download/' | relative_url }}" {% if page.url contains '/download' %}class="active"{% endif %} data-icon="download">Download</a>
-      <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/faq' %}class="active"{% endif %} data-icon="about">FAQ</a>
+      <a href="{{ '/faq/' | relative_url }}" {% if page.url contains '/faq' %}class="active"{% endif %} data-icon="about">FAQ</a>
       <a href="https://zynomon.github.io/error.doc" data-icon="wiki">Wiki</a>
       <a href="https://github.com/zynomon/error" data-icon="github">Github</a>
       <a href="https://discord.gg/Jn7FBwu99F" data-icon="discord">Discord</a>
