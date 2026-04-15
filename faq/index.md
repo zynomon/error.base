@@ -1,9 +1,11 @@
 ---
+
 layout: default
 title: "Frequently Asked Questions"
-description: "This page discovers the topics about frequently asked questions and concerns about error.os
+description: "This page discovers the topics about frequently asked questions and concerns about error.os"
 icon: webicon.svg
 splash: false
+
 ---
 
 
