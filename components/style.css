@@ -13,7 +13,7 @@
     --txt-2: #a0a0a0;
     --txt-3: #666;
     --accent: #ffffff;
-    --accent-2: #343dec;
+    --accent-2: #d0d0d0;
     --accent-3: #a0a0a0;
     --r: 0.75rem;
     --shadow-top-left: -8px -8px 16px rgba(0, 0, 0, 0.5);
@@ -41,7 +41,7 @@
     --txt-2: #4a4a4a;
     --txt-3: #888;
     --accent: #000000;
-    --accent-2: #161a64;
+    --accent-2: #333333;
     --accent-3: #666666;
     --shadow-top-left: 8px 8px 16px rgba(0, 0, 0, 0.15);
     --shadow-bottom-right: -6px -6px 12px rgba(255, 255, 255, 0.9);
@@ -463,7 +463,12 @@ a {
 a:hover {
     border-bottom-color: var(--accent-2);
 }
-
+main a {
+    color: #343dec !important;
+}
+main a:hover {
+    color: #343dec !important;
+}
 code {
     font-size: 0.85em;
     background: linear-gradient(145deg, var(--bg-3), var(--bg-2));
