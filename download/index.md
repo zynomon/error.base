@@ -11,24 +11,24 @@ const ISO_API = {
   renderCard(iso) {
     return `
       <div class="card download-item" data-branch="${iso.branch}" style="cursor: pointer; margin-bottom: 1.5rem;">
-        <div class="card-body" style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: flex-start; gap: 1rem;">
           <div class="iso-icon" data-branch="${iso.branch}" style="flex-shrink: 0;">
-            <img src="/icons/${iso.branch}.jpg" alt="${iso.title}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; margin: 0;">
+            <img src="/icons/${iso.branch}.jpg" alt="${iso.title}" class="download-thumbnail">
           </div>
           <div style="flex: 1;">
-            <h3 style="margin: 0 0 0.25rem 0;">${iso.title}</h3>
+            <h3 style="margin: 0 0 0.25rem 0; font-size: 1.25rem;">${iso.title}</h3>
             <p style="margin: 0; color: var(--txt-2); font-size: 0.85rem;">${iso.description}</p>
           </div>
           <div class="iso-download-links" style="flex-shrink: 0;">
             ${iso.downloadLinks.map(link => `
               <a href="${link.url}" target="_blank" class="btn" style="display: inline-block; margin-left: 0.5rem;">
-                <img src="${link.shieldImg}" style="height: 28px; width: auto; vertical-align: middle;">
+                <img src="${link.shieldImg}" class="shield-badge">
               </a>
             `).join('')}
           </div>
         </div>
-        <div class="iso-wget" style="border-top: 1px solid var(--line-dim); padding: 0.75rem; background: var(--bg-0); margin-top: 0.5rem;">
-          <pre style="margin: 0; padding: 0.5rem; background: transparent; border: none;"><code style="background: transparent; color: var(--accent-2);">${iso.wgetCmd}</code></pre>
+        <div class="iso-wget" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--line-dim);">
+          <pre style="margin: 0; padding: 0.5rem; background: var(--bg-0); border: none; overflow-x: auto;"><code style="background: transparent; color: var(--accent-2); font-family: monospace; font-size: 0.85rem;">${iso.wgetCmd}</code></pre>
         </div>
       </div>
     `;
@@ -57,7 +57,6 @@ const ISO_API = {
     const modal = document.getElementById('iso-modal');
     if (!modal) return;
     
-    // Add show class for transition
     setTimeout(() => modal.classList.add('show'), 10);
     
     modal.querySelector('.modal-close')?.addEventListener('click', () => this.closeModal(modal));
@@ -105,12 +104,62 @@ const ISO_API = {
   cursor: pointer;
 }
 
-.iso-icon img {
-  transition: transform 0.2s ease;
+.download-thumbnail {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  margin: 0 !important;
+  display: block !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
-.iso-icon:hover img {
-  transform: scale(1.05);
+.download-thumbnail:hover {
+  transform: scale(1.05) !important;
+  box-shadow: none !important;
+}
+
+.download-thumbnail:active {
+  transform: scale(1.05) !important;
+}
+
+.shield-badge {
+  height: 28px !important;
+  width: auto !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  display: inline-block !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+.shield-badge:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.modal-image {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover !important;
+  border-radius: 16px !important;
+  margin: 0 auto 1rem auto !important;
+  border: 1px solid var(--line) !important;
+  display: block !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.modal-image:hover {
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .modal-overlay {
@@ -181,15 +230,6 @@ const ISO_API = {
 .modal-header {
   text-align: center;
   margin-bottom: 1rem;
-}
-
-.modal-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 16px;
-  margin: 0 auto 1rem auto;
-  border: 1px solid var(--line);
 }
 
 .modal-details h1 {
@@ -326,7 +366,6 @@ const ISO_DOWNLOADS = [
     fullDescription: `
       <h1>Neospace 2025</h1>
       <hr>
-      <p>If we abbreviate <b>Neo</b>space <b>2</b>02<b>5</b>, Neo becomes <b>N</b>, Space becomes <b>S</b>, and 2025 becomes <b>25</b>. This makes <b>NS25</b>, which is the first release of Neospace.</p>
       <p>It was released on the last day of the year 2025.</p>
       <p>This version contained several applications built by the error.os team:</p>
       <p><b>Vex Emerald</b> which is the text editor at version 2.5.</p>
@@ -458,12 +497,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <p>error.os has been out there since 2025. While the main goal is to reach a cool desktop environment with better usability, it is partially implemented.</p>
 
+<p>The name Neospace could mean New Space or New Area or Dimension, though the naming of this branch was not that deep. If we abbreviate <b>Neo</b>space <b>2</b>02<b>5</b>, Neo becomes <b>N</b>, Space becomes <b>S</b>, and 2025 becomes <b>25</b>. This makes <b>NS25</b>, which is the first release of Neospace. We are currently working on Neospace 2026 which is abbreviated as <b>NS26</b>.</p>
+
 <div id="iso"></div>
 
 <hr>
 
 <div align="left">
-  <img src="https://github.com/zynomon/error/raw/web-side/icons/void.jpg" width="250" height="250" align="left" style="margin-right: 20px; border-radius: 12px;" />
+  <img src="https://github.com/zynomon/error/raw/web-side/icons/void.jpg" width="250" height="250" align="left" style="margin-right: 20px; border-radius: 12px;">
   <h1>Void</h1>
   <p>Void is a branch of error.os that could be called testing but that is not exactly accurate. These are ISOs that boot but may have some issues. We ship them regardless so users can preview upcoming features before they reach the stable Neospace branch.</p>
   <p>Void releases are not rolling releases. You cannot update or upgrade a Void installation to a newer version through official support. They are intended for preview purposes only.</p>
@@ -473,11 +514,9 @@ document.addEventListener('DOMContentLoaded', () => {
 <br clear="all">
 
 <div align="right">
-  <img src="https://github.com/zynomon/error/raw/web-side/icons/neospace.jpg" width="250" height="250" align="right" style="margin-left: 20px; border-radius: 12px;" />
+  <img src="https://github.com/zynomon/error/raw/web-side/icons/neospace.jpg" width="250" height="250" align="right" style="margin-left: 20px; border-radius: 12px;" >
   <h1>Neospace</h1>
   <p>Neospace is the main branch of error.os for x64-bit standard computers and laptops. These releases are considered stable and are the recommended way to experience error.os.</p>
-  <p>The name Neospace could mean New Space or New Area or Dimension, though the naming of this branch was not that deep.</p>
-  <p>We are currently working on Neospace 2026 which is abbreviated as NS26.</p>
 </div>
 
 <br clear="all">
