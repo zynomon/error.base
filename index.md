@@ -28,7 +28,7 @@ in simple terms.
  <div align='left'>
 <img src="https://github.com/zynomon/error/raw/web-side/icons/void.jpg" width="250" height="250" align="left" />
 <h1>Void</h1>
-<div>Void is a branch of error.os that could be called "testing" but that isn't exactly that. These are ISOs that boot but may have some issues. We ship them regardless so users can preview upcoming features. Currently, Void v1 and v2 releases are available as unstable/early versions of Neospace 2025, v3 release is of neospace 26. Learn more about it by <a href="https://zynomon.github.io/error.doc/docs/000/VOID.html" target="_blank">clicking here</a>.</div>
+<div>Void is a branch of error.os , it's preview builds of the Upcoming NeoSpace Release<a href="https://zynomon.github.io/error.doc/docs/000/VOID.html" target="_blank">clicking here</a>.</div>
 </div>
 
 <br clear="all">
@@ -36,14 +36,21 @@ in simple terms.
 <div align='right'>
 <img src="https://github.com/zynomon/error/raw/web-side/icons/neospace.jpg" width="250" height="250" align="right" />
 <h1>Neospace</h1>
-<div>Neospace is the main branch of error.os for x64-bit standard computers and laptops. Currently, Neospace 2025 is the latest version. And we are working on Neospace 2026 ( NS26 ), The name neospace could mean New Space or New Area or Dimension. although the naming of this branch wasn't that deep</div>
+<div>Neospace is the main branch of error.os for x64-bit standard computers and laptops. Currently, Neospace 2025 is the latest version. And we are currently working on Neospace 2026 ( NS26 ),</div>
 </div>
 
+<br clear="all">
+<sub>information about both of them are scattered around our websites. for downloading check the download page</sub>
 
 
 # Some Preview of error.os
 
-<sub>( error.os uses KDE's minimal version and debian's patched linux kernel , glibc , systemd  for wide range application support. also some of the assets are originally made, you can see the source of wallpapers here [ERR PAPER](https://github.com/zynomon/errpaper) )</sub>
+<sub> ( error.os uses KDE's minimal version and debian's patched linux kernel , glibc , systemd  for wide range application support. also some of the assets are originally made, you can see the source of wallpapers here 
+<a href=https://github.com/zynomon/errpaper>
+        ERR_PAPERS
+        </a> 
+        </sub>
+
 <style>
 .slider {
   width: 100%;
