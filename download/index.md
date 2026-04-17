@@ -136,16 +136,15 @@ const ISO_API = {
   line-height: 1 !important;
 }
 
-.shield-badge {
-  height: 28px !important;
-  width: auto !important;
-  vertical-align: middle !important;
-  margin: 0 !important;
-  display: inline-block !important;
-  border: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-  cursor: default !important;
+.shield-badge {    
+    height: 28px !important;
+ width: auto !important;
+vertical-align: middle !important;
+margin: 0 !important;
+display: inline-block !important;
+transform: none !important; 
+cursor: alias !important;
+border-radius: initial;
 }
 
 .shield-badge:hover {
