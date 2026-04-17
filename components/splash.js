@@ -22,12 +22,15 @@
 
     const fontLink = document.createElement("link");
     fontLink.href =
-      "https://fonts.googleapis.com/css2?family=Nimbus+Mono+PS&display=swap";
+      "https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap";
     fontLink.rel = "stylesheet";
     document.head.appendChild(fontLink);
 
     const style = document.createElement("style");
     style.textContent = `
+      #splash-screen, #splash-screen * {
+        font-family: "Courier Prime", "Courier New", monospace !important;
+      }
       #splash-screen {
         position: fixed;
         top: 0;
@@ -47,7 +50,6 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        font-family: "Nimbus Mono PS", monospace;
       }
       .glitch-container {
         position: relative;
@@ -234,7 +236,7 @@
       ctx.fillStyle =
         Math.random() > 0.9 ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = fontSize + "px 'Nimbus Mono PS', monospace";
+      ctx.font = fontSize + "px 'Courier Prime', 'Courier New', monospace";
 
       for (let i = 0; i < drops.length; i++) {
         const number = Math.floor(Math.random() * 99999);
@@ -314,7 +316,16 @@
 
     const flashInterval = setInterval(flashScreen, CONFIG.glitchInterval);
 
+    function stopAllEffects() {
+      clearInterval(matrixInterval);
+      clearInterval(shakeInterval);
+      clearInterval(tearInterval);
+      clearInterval(flashInterval);
+    }
+
     function showTerminatedText() {
+      stopAllEffects();
+
       const overlay = document.createElement("div");
       overlay.style.position = "fixed";
       overlay.style.top = "0";
@@ -343,22 +354,21 @@
       `;
 
       const terminated = document.createElement("div");
-      terminated.textContent = "> terminated_";
       terminated.style.position = "relative";
       terminated.style.zIndex = "2";
-      terminated.style.fontFamily = "'Nimbus Mono PS', monospace";
       terminated.style.fontSize = "28px";
       terminated.style.color = "#00ff00";
       terminated.style.textShadow = "0 0 8px #00ff00";
       terminated.style.fontWeight = "bold";
       terminated.style.whiteSpace = "pre";
       terminated.style.backgroundColor = "transparent";
+      terminated.innerHTML =
+        '> terminated<span class="term-underscore" style="opacity:1">_</span>';
 
       overlay.appendChild(svgGrayscale);
       overlay.appendChild(terminated);
       document.body.appendChild(overlay);
 
-      let visible = true;
       const startTime = Date.now();
       const duration = CONFIG.pauseDuration;
 
@@ -366,12 +376,22 @@
         const elapsed = Date.now() - startTime;
         if (elapsed >= duration) {
           overlay.remove();
+          splashScreen.style.transition = `opacity ${CONFIG.fadeDuration}ms`;
+          splashScreen.style.opacity = "0";
+          setTimeout(() => {
+            splashScreen.remove();
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+            document.body.style.height = "";
+            document.documentElement.style.height = "";
+          }, CONFIG.fadeDuration);
           return;
         }
-        const shouldShowUnderscore = Math.floor(elapsed / 500) % 2 === 0;
-        terminated.textContent = shouldShowUnderscore
-          ? "> terminated_"
-          : "> terminated";
+        const underscoreSpan = terminated.querySelector(".term-underscore");
+        if (underscoreSpan) {
+          underscoreSpan.style.opacity =
+            Math.floor(elapsed / 500) % 2 === 0 ? "1" : "0";
+        }
         requestAnimationFrame(loop);
       }
 
@@ -379,23 +399,7 @@
     }
 
     setTimeout(() => {
-      paused = true;
       showTerminatedText();
-      setTimeout(() => {
-        splashScreen.style.transition = `opacity ${CONFIG.fadeDuration}ms`;
-        splashScreen.style.opacity = "0";
-        setTimeout(() => {
-          clearInterval(matrixInterval);
-          clearInterval(shakeInterval);
-          clearInterval(tearInterval);
-          clearInterval(flashInterval);
-          splashScreen.remove();
-          document.body.style.overflow = "";
-          document.documentElement.style.overflow = "";
-          document.body.style.height = "";
-          document.documentElement.style.height = "";
-        }, CONFIG.fadeDuration);
-      }, CONFIG.pauseDuration);
     }, CONFIG.duration);
   });
 })();
