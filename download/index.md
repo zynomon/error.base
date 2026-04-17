@@ -574,7 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <p>Compare the output with the checksum value provided in the respective text file. If they match, your download is verified.</p>
 
-<h3>How to verify on macOS</h3>
+<h3>How to verify on macOS/Linux/BSD/Posixy systems?</h3>
 
 <p>Open Terminal in the download folder and use the following commands:</p>
 
@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <p><b>SHA512 verification:</b></p>
 <pre><code>shasum -a 512 *.iso</code></pre>
-
+<sub>note that using '*' on a folder filled with tons of files can bring issues., soon we will follow up a consistent pattern for it</sub>
 <p>Compare the output with the published checksum value found in the accompanying text file.</p>
 
 <hr>
