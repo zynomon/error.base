@@ -5,8 +5,8 @@
     duration: 4000,
     pauseDuration: 1000,
     fadeDuration: 800,
-    matrixFPS: 60,
-    glitchInterval: 80,
+    matrixFPS: 100,
+    glitchInterval: 120,
     shakeIntensity: 20,
     fontSize: 16,
   };
@@ -57,7 +57,7 @@
         background: #000;
         font-family: "Nimbus Mono", monospace;
         font-size: 14px;
-        color: #0f0;
+        color: #ff0000;
         overflow: hidden;
       }
       .panic-text {
@@ -92,13 +92,13 @@
       }
       .glitch::before {
         left: 2px;
-        text-shadow: -2px 0 #00ffff;
+        text-shadow: -2px 0 #ff0000;
         clip: rect(44px, 450px, 56px, 0);
         animation: glitchAnim1 0.5s infinite linear alternate-reverse;
       }
       .glitch::after {
         left: -2px;
-        text-shadow: -2px 0 #ff00ff;
+        text-shadow: -2px 0 #ff0000;
         clip: rect(44px, 450px, 56px, 0);
         animation: glitchAnim2 0.475s infinite linear alternate-reverse;
       }
@@ -138,10 +138,10 @@
       }
       .error-code {
         font-size: clamp(1.5rem, 6vw, 3rem);
-        color: #888;
+        color: #ff0000;
         margin-top: 2rem;
         font-family: "Nimbus Mono", monospace;
-        text-shadow: 0 0 20px #fff, 0 0 40px #fff;
+        text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
         animation: errorFlicker 0.15s infinite, errorShake 0.5s infinite;
         letter-spacing: 0.3em;
         will-change: opacity, transform;
@@ -166,7 +166,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: repeating-linear-gradient(0deg, rgba(255, 0, 0, 0.15) 0px, rgba(255, 0, 0, 0.15) 2px, transparent 2px, transparent 4px);
+        background: repeating-linear-gradient(0deg, rgba(255, 0, 0, 0.3) 0px, rgba(255, 0, 0, 0.3) 2px, transparent 2px, transparent 4px);
         animation: scanlineMove 0.1s linear infinite, scanlineGlitch 0.5s infinite;
         pointer-events: none;
         opacity: 0.8;
@@ -180,6 +180,19 @@
       @keyframes scanlineGlitch {
         0%, 90%, 100% { opacity: 0.8; }
         95% { opacity: 0.3; }
+      }
+      .terminated-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 10001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
       }
     `;
     document.head.appendChild(style);
@@ -238,11 +251,7 @@
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        const rand = Math.random();
-        if (rand > 0.97) ctx.fillStyle = "#FF0";
-        else if (rand > 0.94) ctx.fillStyle = "#F0F";
-        else ctx.fillStyle = "#FF0000";
-
+        ctx.fillStyle = "#ff0000";
         ctx.fillText(text, x, y);
 
         if (Math.random() > 0.96) ctx.fillRect(0, y, canvas.width, 2);
@@ -262,7 +271,7 @@
       setTimeout(() => (splashScreen.style.transform = ""), 50);
     }
 
-    const shakeInterval = setInterval(screenShake, 50);
+    const shakeInterval = setInterval(screenShake, 80);
 
     function createScreenTear() {
       if (paused) return;
@@ -272,10 +281,7 @@
       tear.style.width = "100%";
       tear.style.height = Math.random() * 60 + 5 + "px";
       tear.style.top = Math.random() * window.innerHeight + "px";
-      const r = Math.random() * 255;
-      const g = Math.random() * 255;
-      const b = Math.random() * 255;
-      tear.style.background = `rgba(${r},${g},${b},0.15)`;
+      tear.style.background = "rgba(255, 0, 0, 0.25)";
       tear.style.zIndex = "9999";
       tear.style.mixBlendMode = "screen";
       tear.style.pointerEvents = "none";
@@ -297,10 +303,7 @@
       flash.style.left = "0";
       flash.style.width = "100%";
       flash.style.height = "100%";
-      const r = Math.random() * 255;
-      const g = Math.random() * 255;
-      const b = Math.random() * 255;
-      flash.style.background = `rgba(${r},${g},${b},0.08)`;
+      flash.style.background = "rgba(255, 0, 0, 0.1)";
       flash.style.zIndex = "9998";
       flash.style.pointerEvents = "none";
       flash.style.mixBlendMode = "screen";
@@ -311,21 +314,22 @@
     const flashInterval = setInterval(flashScreen, CONFIG.glitchInterval);
 
     function showTerminatedText() {
+      const overlay = document.createElement("div");
+      overlay.className = "terminated-overlay";
+
       const terminated = document.createElement("div");
       terminated.textContent = "> terminated_";
-      terminated.style.position = "fixed";
-      terminated.style.left = "50%";
-      terminated.style.top = "50%";
-      terminated.style.transform = "translate(-50%, -50%)";
       terminated.style.fontFamily = "'Nimbus Mono', monospace";
-      terminated.style.fontSize = "28px";
-      terminated.style.color = "#00FF00";
-      terminated.style.textShadow = "0 0 8px #00FF00";
-      terminated.style.zIndex = "10002";
-      terminated.style.pointerEvents = "none";
+      terminated.style.fontSize = "clamp(2rem, 8vw, 4rem)";
+      terminated.style.color = "#00ff00";
+      terminated.style.textShadow =
+        "0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00";
       terminated.style.fontWeight = "bold";
       terminated.style.whiteSpace = "pre";
-      splashScreen.appendChild(terminated);
+      terminated.style.letterSpacing = "0.1em";
+
+      overlay.appendChild(terminated);
+      splashScreen.appendChild(overlay);
 
       let visible = true;
       const cursor = setInterval(() => {
@@ -335,7 +339,7 @@
 
       setTimeout(() => {
         clearInterval(cursor);
-        terminated.remove();
+        overlay.remove();
       }, CONFIG.pauseDuration);
     }
 
