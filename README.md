@@ -1,4 +1,4 @@
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+<!-- wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 
 ---
 ### HUGE
@@ -34,4 +34,6 @@ the ascii after installation
 
 
 # To download or install error.base 
-check error.os repo
+check error.os repo -->
+# **THIS PAGE IS FULLY  FOR VIEWING OLD ERROR.OS WEBSITE**
+ALSO CURRENT ZYNOMON.GITHUB.IO/ERROR DEVELOPMENT IS DONE HERE
