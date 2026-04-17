@@ -326,18 +326,23 @@
     function showTerminatedText() {
       stopAllEffects();
 
-      const glitchElement = splashScreen.querySelector(".glitch");
-      const errorCode = splashScreen.querySelector(".error-code");
-      const glitchLines = splashScreen.querySelector(".glitch-lines");
+      const glitchEl = splashScreen.querySelector(".glitch");
+      const errorCodeEl = splashScreen.querySelector(".error-code");
+      const glitchLinesEl = splashScreen.querySelector(".glitch-lines");
 
-      if (glitchElement) {
-        glitchElement.style.animation = "none";
+      if (glitchEl) {
+        glitchEl.style.animation = "none";
+        glitchEl.style.color = "#888";
+        glitchEl.style.textShadow = "0 0 10px #888, 0 0 20px #666";
       }
-      if (errorCode) {
-        errorCode.style.animation = "none";
+      if (errorCodeEl) {
+        errorCodeEl.style.animation = "none";
+        errorCodeEl.style.color = "#888";
+        errorCodeEl.style.textShadow = "0 0 10px #666";
       }
-      if (glitchLines) {
-        glitchLines.style.animation = "none";
+      if (glitchLinesEl) {
+        glitchLinesEl.style.animation = "none";
+        glitchLinesEl.style.opacity = "0.3";
       }
 
       splashScreen.style.transform = "";
@@ -414,7 +419,9 @@
 
       loop();
     }
+
     setTimeout(() => {
+      paused = true;
       showTerminatedText();
     }, CONFIG.duration);
   });
