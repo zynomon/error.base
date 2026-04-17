@@ -127,6 +127,15 @@ const ISO_API = {
   transform: scale(1.05) !important;
 }
 
+.iso-download-links .btn {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+
 .shield-badge {
   height: 28px !important;
   width: auto !important;
@@ -134,7 +143,6 @@ const ISO_API = {
   margin: 0 !important;
   display: inline-block !important;
   border: none !important;
-  border-radius: 0 !important;
   box-shadow: none !important;
   transform: none !important;
   cursor: default !important;
