@@ -22,6 +22,9 @@
 
     const style = document.createElement("style");
     style.textContent = `
+      * {
+        font-family: monospace !important;
+      }
       #splash-screen {
         position: fixed;
         top: 0;
@@ -35,8 +38,8 @@
         justify-content: center;
         overflow: hidden;
         opacity: 1;
-        transition: opacity 0.5s ease-out, transform 0.1s ease-out, filter 0.1s ease-out;
-        will-change: transform, opacity, filter;
+        transition: opacity 0.5s ease-out;
+        will-change: transform, opacity;
         user-select: none;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -55,9 +58,7 @@
         width: 100%;
         height: 100%;
         background: #000;
-        font-family: "Nimbus Mono", monospace;
         font-size: 14px;
-        color: #ff0000;
         overflow: hidden;
       }
       .panic-text {
@@ -73,12 +74,12 @@
       .glitch {
         font-size: clamp(3rem, 15vw, 12rem);
         font-weight: 900;
-        color: #ff0000;
+        color: #ff3300;
         position: relative;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         animation: glitchShake 0.1s infinite, colorPulse 0.3s infinite;
-        text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 80px #ff0000, 0 0 120px #ff0000;
+        text-shadow: 0 0 10px #ff3300, 0 0 20px #ff3300, 0 0 40px #ff3300, 0 0 80px #ff3300;
         line-height: 1;
         will-change: transform, filter;
       }
@@ -92,13 +93,13 @@
       }
       .glitch::before {
         left: 2px;
-        text-shadow: -2px 0 #ff0000;
+        text-shadow: -2px 0 #00ffff;
         clip: rect(44px, 450px, 56px, 0);
         animation: glitchAnim1 0.5s infinite linear alternate-reverse;
       }
       .glitch::after {
         left: -2px;
-        text-shadow: -2px 0 #ff0000;
+        text-shadow: -2px 0 #ff00ff;
         clip: rect(44px, 450px, 56px, 0);
         animation: glitchAnim2 0.475s infinite linear alternate-reverse;
       }
@@ -137,13 +138,12 @@
         100% { clip: rect(5px, 9999px, 65px, 0); transform: skew(-0.4deg); }
       }
       .error-code {
-        font-size: clamp(1.5rem, 6vw, 3rem);
-        color: #ff0000;
+        font-size: clamp(1rem, 4vw, 2rem);
+        color: #ffcc00;
         margin-top: 2rem;
-        font-family: "Nimbus Mono", monospace;
-        text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+        text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00;
         animation: errorFlicker 0.15s infinite, errorShake 0.5s infinite;
-        letter-spacing: 0.3em;
+        letter-spacing: 0.1em;
         will-change: opacity, transform;
       }
       @keyframes errorFlicker {
@@ -166,7 +166,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: repeating-linear-gradient(0deg, rgba(255, 0, 0, 0.3) 0px, rgba(255, 0, 0, 0.3) 2px, transparent 2px, transparent 4px);
+        background: repeating-linear-gradient(0deg, rgba(255, 0, 0, 0.2) 0px, rgba(255, 0, 0, 0.2) 2px, transparent 2px, transparent 4px);
         animation: scanlineMove 0.1s linear infinite, scanlineGlitch 0.5s infinite;
         pointer-events: none;
         opacity: 0.8;
@@ -187,7 +187,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.85);
+        background: rgba(0, 0, 0, 0.9);
         z-index: 10001;
         display: flex;
         align-items: center;
@@ -202,7 +202,7 @@
         <div class="matrix-rain"></div>
         <div class="panic-text">
           <div class="glitch" data-text="SYSTEM ERROR">FATAL ERROR</div>
-          <div class="error-code">SEGMENTATION_FAULT-X00-YOU-CAN'T-FIX-CONTACT-VENDOR</div>
+          <div class="error-code">SEGMENTATION_FAULT_X00_YOU_CANT_FIX_CONTACT_VENDOR</div>
           <div class="glitch-lines"></div>
         </div>
       </div>
@@ -230,6 +230,14 @@
     const columns = Math.floor(canvas.width / fontSize);
     const drops = [];
     const speeds = [];
+    const saturatedColors = [
+      "#ff0000",
+      "#ff00ff",
+      "#00ffff",
+      "#ffff00",
+      "#ff3300",
+      "#ff0099",
+    ];
 
     for (let i = 0; i < columns; i++) {
       drops[i] = Math.floor(Math.random() * -100);
@@ -240,21 +248,24 @@
 
     function drawMatrix() {
       if (paused) return;
-      ctx.fillStyle =
-        Math.random() > 0.9 ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.08)";
+      ctx.fillStyle = "rgba(0,0,0,0.08)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = fontSize + "px 'Nimbus Mono', monospace";
+      ctx.font = fontSize + "px monospace";
 
       for (let i = 0; i < drops.length; i++) {
         const number = Math.floor(Math.random() * 99999);
         const text = `ERR_${number}`;
         const x = i * fontSize;
         const y = drops[i] * fontSize;
-
-        ctx.fillStyle = "#ff0000";
+        const color =
+          saturatedColors[Math.floor(Math.random() * saturatedColors.length)];
+        ctx.fillStyle = color;
         ctx.fillText(text, x, y);
 
-        if (Math.random() > 0.96) ctx.fillRect(0, y, canvas.width, 2);
+        if (Math.random() > 0.96) {
+          ctx.fillStyle = color;
+          ctx.fillRect(0, y, canvas.width, 2);
+        }
         if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
         drops[i] += speeds[i];
       }
@@ -281,7 +292,13 @@
       tear.style.width = "100%";
       tear.style.height = Math.random() * 60 + 5 + "px";
       tear.style.top = Math.random() * window.innerHeight + "px";
-      tear.style.background = "rgba(255, 0, 0, 0.25)";
+      const colors = [
+        "rgba(255,0,0,0.3)",
+        "rgba(255,0,255,0.3)",
+        "rgba(0,255,255,0.3)",
+        "rgba(255,255,0,0.3)",
+      ];
+      tear.style.background = colors[Math.floor(Math.random() * colors.length)];
       tear.style.zIndex = "9999";
       tear.style.mixBlendMode = "screen";
       tear.style.pointerEvents = "none";
@@ -303,7 +320,14 @@
       flash.style.left = "0";
       flash.style.width = "100%";
       flash.style.height = "100%";
-      flash.style.background = "rgba(255, 0, 0, 0.1)";
+      const colors = [
+        "rgba(255,0,0,0.1)",
+        "rgba(255,0,255,0.1)",
+        "rgba(0,255,255,0.1)",
+        "rgba(255,255,0,0.1)",
+      ];
+      flash.style.background =
+        colors[Math.floor(Math.random() * colors.length)];
       flash.style.zIndex = "9998";
       flash.style.pointerEvents = "none";
       flash.style.mixBlendMode = "screen";
@@ -319,11 +343,10 @@
 
       const terminated = document.createElement("div");
       terminated.textContent = "> terminated_";
-      terminated.style.fontFamily = "'Nimbus Mono', monospace";
-      terminated.style.fontSize = "clamp(2rem, 8vw, 4rem)";
+      terminated.style.fontFamily = "monospace";
+      terminated.style.fontSize = "2rem";
       terminated.style.color = "#00ff00";
-      terminated.style.textShadow =
-        "0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 40px #00ff00";
+      terminated.style.textShadow = "0 0 10px #00ff00, 0 0 20px #00ff00";
       terminated.style.fontWeight = "bold";
       terminated.style.whiteSpace = "pre";
       terminated.style.letterSpacing = "0.1em";
