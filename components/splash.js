@@ -326,6 +326,22 @@
     function showTerminatedText() {
       stopAllEffects();
 
+      const glitchElement = splashScreen.querySelector(".glitch");
+      const errorCode = splashScreen.querySelector(".error-code");
+      const glitchLines = splashScreen.querySelector(".glitch-lines");
+
+      if (glitchElement) {
+        glitchElement.style.animation = "none";
+      }
+      if (errorCode) {
+        errorCode.style.animation = "none";
+      }
+      if (glitchLines) {
+        glitchLines.style.animation = "none";
+      }
+
+      splashScreen.style.transform = "";
+
       const overlay = document.createElement("div");
       overlay.style.position = "fixed";
       overlay.style.top = "0";
@@ -356,6 +372,7 @@
       const terminated = document.createElement("div");
       terminated.style.position = "relative";
       terminated.style.zIndex = "2";
+      terminated.style.fontFamily = "'Courier Prime', 'Courier New', monospace";
       terminated.style.fontSize = "28px";
       terminated.style.color = "#00ff00";
       terminated.style.textShadow = "0 0 8px #00ff00";
@@ -397,7 +414,6 @@
 
       loop();
     }
-
     setTimeout(() => {
       showTerminatedText();
     }, CONFIG.duration);
