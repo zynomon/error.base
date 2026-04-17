@@ -3,7 +3,7 @@
 
   const CONFIG = {
     duration: 4000,
-    pauseDuration: 1000,
+    pauseDuration: 2500,
     fadeDuration: 800,
     matrixFPS: 100,
     glitchInterval: 120,
@@ -203,37 +203,6 @@
         0%, 90%, 100% { opacity: 0.8; }
         95% { opacity: 0.3; }
       }
-      .terminated-wrapper {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10001;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-      }
-      .grayscale-layer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        opacity: 0.85;
-      }
-      .terminated-text {
-        position: relative;
-        z-index: 10003;
-        font-size: 28px;
-        color: #00ff00;
-        text-shadow: 0 0 8px #00ff00;
-        font-weight: bold;
-        white-space: pre;
-        background: transparent;
-      }
     `;
     document.head.appendChild(style);
 
@@ -364,20 +333,48 @@
     const flashInterval = setInterval(flashScreen, CONFIG.glitchInterval);
 
     function showTerminatedText() {
-      const wrapper = document.createElement("div");
-      wrapper.className = "terminated-wrapper";
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.zIndex = "10002";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.pointerEvents = "none";
 
-      const grayscaleDiv = document.createElement("div");
-      grayscaleDiv.className = "grayscale-layer";
-      grayscaleDiv.style.filter = "url(#grayscaleFilter)";
+      const svgGrayscale = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      svgGrayscale.setAttribute(
+        "style",
+        "position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;",
+      );
+      svgGrayscale.innerHTML = `
+        <filter id="termGrayscale">
+          <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0"/>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#termGrayscale)" fill="#000" opacity="0.85"/>
+      `;
 
       const terminated = document.createElement("div");
-      terminated.className = "terminated-text";
       terminated.textContent = "> terminated_";
+      terminated.style.position = "relative";
+      terminated.style.zIndex = "2";
+      terminated.style.fontFamily = "'Nimbus Mono PS', monospace";
+      terminated.style.fontSize = "28px";
+      terminated.style.color = "#00ff00";
+      terminated.style.textShadow = "0 0 8px #00ff00";
+      terminated.style.fontWeight = "bold";
+      terminated.style.whiteSpace = "pre";
+      terminated.style.backgroundColor = "transparent";
 
-      wrapper.appendChild(grayscaleDiv);
-      wrapper.appendChild(terminated);
-      splashScreen.appendChild(wrapper);
+      overlay.appendChild(svgGrayscale);
+      overlay.appendChild(terminated);
+      document.body.appendChild(overlay);
 
       let visible = true;
       const startTime = Date.now();
@@ -386,18 +383,19 @@
       function loop() {
         const elapsed = Date.now() - startTime;
         if (elapsed >= duration) {
-          wrapper.remove();
+          overlay.remove();
           return;
         }
         const shouldShowUnderscore = Math.floor(elapsed / 500) % 2 === 0;
         terminated.textContent = shouldShowUnderscore
-          ? "> terminated"
-          : "> terminated_";
+          ? "> terminated_"
+          : "> terminated";
         requestAnimationFrame(loop);
       }
 
       loop();
     }
+
     setTimeout(() => {
       paused = true;
       splashScreen.style.filter = "grayscale(100%)";
