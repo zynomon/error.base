@@ -43,9 +43,6 @@
 
     const style = document.createElement("style");
     style.textContent = `
-      * {
-        font-family: "Nimbus Mono PS", monospace !important;
-      }
       #splash-screen {
         position: fixed;
         top: 0;
@@ -65,6 +62,7 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
+        font-family: "Nimbus Mono PS", monospace;
       }
       .glitch-container {
         position: relative;
@@ -389,7 +387,7 @@
         const shouldShowUnderscore = Math.floor(elapsed / 500) % 2 === 0;
         terminated.textContent = shouldShowUnderscore
           ? "> terminated_"
-          : "> terminated⠀";
+          : "> terminated";
         requestAnimationFrame(loop);
       }
 
