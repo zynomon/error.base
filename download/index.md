@@ -22,13 +22,13 @@ const ISO_API = {
           <div class="iso-download-links" style="flex-shrink: 0;">
             ${iso.downloadLinks.map(link => `
               <a href="${link.url}" target="_blank" class="btn" style="display: inline-block; margin-left: 0.5rem;">
-                <img src="${link.shieldImg}" class="shield-badge">
+                <img src="${link.shieldImg}" class="badge-link">
               </a>
             `).join('')}
           </div>
         </div>
         <div class="iso-wget" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--line-dim);">
-          <pre><code>${iso.wgetCmd}</code></pre>
+          <pre><code>${iso.wcmd}</code></pre>
         </div>
       </div>
     `;
@@ -136,7 +136,7 @@ const ISO_API = {
   line-height: 1 !important;
 }
 
-.shield-badge {    
+.badge-link {    
     height: 28px !important;
  width: auto !important;
 vertical-align: middle !important;
@@ -147,7 +147,7 @@ cursor: alias !important;
 border-radius: initial;
 }
 
-.shield-badge:hover {
+.badge-link:hover {
   transform: none !important;
   box-shadow: none !important;
 }
@@ -298,14 +298,18 @@ const ISO_DOWNLOADS = [
     downloadLinks: [
       {
         url: "https://archive.org/download/error.os-neospace-2026/NS_26%20VOID%20%28%20boots%20but%20has%20issues%20%29/NS26_VOID_3.0.iso%20",
-        shieldImg: "https://img.shields.io/badge/ISO-555555?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/ISO-1e3a5f?style=for-the-badge&logo=sonarr&logoColor=white"
+      },
+      {
+        url: "https://archive.org/details/error.os-neospace-2026",
+        shieldImg: "https://img.shields.io/badge/Ia-1e3a5f?style=for-the-badge&logo=internetarchive&logoColor=white"
       },
       {
         url: "https://archive.org/download/error.os-neospace-2026/NS_26%20VOID%20%28%20boots%20but%20has%20issues%20%29/md5.txt",
-        shieldImg: "https://img.shields.io/badge/MD5-555555?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/MD5-1e3a5f?style=for-the-badge&logo=apachemaven&logoColor=white"
       }
     ],
-    wgetCmd: `wget "https://archive.org/download/error.os-neospace-2026/NS_26%20VOID%20%28%20boots%20but%20has%20issues%20%29/NS26_VOID_3.0.iso%20"`,
+    wcmd: `wget "https://archive.org/download/error.os-neospace-2026/NS_26%20VOID%20%28%20boots%20but%20has%20issues%20%29/NS26_VOID_3.0.iso%20"`,
     fullDescription: `
       <h1>Void v3</h1>
       <hr>
@@ -350,26 +354,30 @@ const ISO_DOWNLOADS = [
     downloadLinks: [
       {
         url: "https://archive.org/download/error.os_Neospace_2025/error.os_Neospace_2025.iso",
-        shieldImg: "https://img.shields.io/badge/ISO-0055ff?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/ISO-1a365d?style=for-the-badge&logo=sonarr&logoColor=white"
+      },
+      {
+        url: "https://archive.org/details/error.os_Neospace_2025",
+        shieldImg: "https://img.shields.io/badge/Ia-1a365d?style=for-the-badge&logo=internetarchive&logoColor=white"
       },
       {
         url: "https://archive.org/download/error.os_Neospace_2025/iso_verification.gpg",
-        shieldImg: "https://img.shields.io/badge/GPG-0055ff?style=for-the-badge&logo=gnuprivacyguard&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/GPG-1a365d?style=for-the-badge&logo=apachemaven&logoColor=white"
       },
       {
         url: "https://archive.org/download/error.os_Neospace_2025/iso_verification.sha512.txt",
-        shieldImg: "https://img.shields.io/badge/SHA512-0055ff?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/SHA512-1a365d?style=for-the-badge&logo=apachemaven&logoColor=white"
       },
       {
         url: "https://archive.org/download/error.os_Neospace_2025/sha256sum.txt",
-        shieldImg: "https://img.shields.io/badge/SHA256-0055ff?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/SHA256-1a365d?style=for-the-badge&logo=apachemaven&logoColor=white"
       },
       {
         url: "https://archive.org/download/error.os_Neospace_2025/md5sum.txt",
-        shieldImg: "https://img.shields.io/badge/MD5-0055ff?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/MD5-1a365d?style=for-the-badge&logo=apachemaven&logoColor=white"
       }
     ],
-    wgetCmd: `wget https://archive.org/download/error.os_Neospace_2025/error.os_Neospace_2025.iso`,
+    wcmd: `wget https://archive.org/download/error.os_Neospace_2025/error.os_Neospace_2025.iso`,
     fullDescription: `
       <h1>Neospace 2025</h1>
       <hr>
@@ -412,10 +420,14 @@ const ISO_DOWNLOADS = [
     downloadLinks: [
       {
         url: "https://archive.org/download/error.os-void-0.2/error.os%20Void%200.2.iso",
-        shieldImg: "https://img.shields.io/badge/ISO-555555?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/ISO-1e3a5f?style=for-the-badge&logo=sonarr&logoColor=white"
+      },
+      {
+        url: "https://archive.org/details/error.os-void-0.2",
+        shieldImg: "https://img.shields.io/badge/Ia-1e3a5f?style=for-the-badge&logo=internetarchive&logoColor=white"
       }
     ],
-    wgetCmd: `wget "https://archive.org/download/error.os-void-0.2/error.os%20Void%200.2.iso"`,
+    wcmd: `wget "https://archive.org/download/error.os-void-0.2/error.os%20Void%200.2.iso"`,
     fullDescription: `
       <h1>Void v2</h1>
       <hr>
@@ -459,10 +471,14 @@ const ISO_DOWNLOADS = [
     downloadLinks: [
       {
         url: "https://archive.org/download/error.os-Neospace-64bit/error.os-Neospace-64bit.iso",
-        shieldImg: "https://img.shields.io/badge/ISO-555555?style=for-the-badge&logo=archive&logoColor=white"
+        shieldImg: "https://img.shields.io/badge/ISO-1e3a5f?style=for-the-badge&logo=sonarr&logoColor=white"
+      },
+      {
+        url: "https://archive.org/details/error.os-Neospace-64bit",
+        shieldImg: "https://img.shields.io/badge/Ia-1e3a5f?style=for-the-badge&logo=internetarchive&logoColor=white"
       }
     ],
-    wgetCmd: `wget https://archive.org/download/error.os-Neospace-64bit/error.os-Neospace-64bit.iso`,
+    wcmd: `wget https://archive.org/download/error.os-Neospace-64bit/error.os-Neospace-64bit.iso`,
     fullDescription: `
       <h1>Void v1</h1>
       <hr>
@@ -494,7 +510,6 @@ const ISO_DOWNLOADS = [
     `
   }
 ];
-
 document.addEventListener('DOMContentLoaded', () => {
   ISO_API.render(ISO_DOWNLOADS, 'iso');
 });
